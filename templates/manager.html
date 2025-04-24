@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Units</title>
+  <style>
+    table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
+    th { background-color: #f2f2f2; }
+    form { display: contents; }
+    input[type="text"] { width: 100%; }
+  </style>
+</head>
+<body>
+  <h2>Greek Apartments Management</h2>
+
+  {% if message %}
+    <p style="color: green;">{{ message }}</p>
+  {% endif %}
+
+  <table>
+    <thead>
+      <tr>
+        <th>Unit ID</th>
+        <th>Building #</th>
+        <th>Unit #</th>
+        <th>Owner Name</th>
+        <th>Occupant By</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- Existing rows -->
+      {% for unit in units %}
+      <tr>
+        <form method="POST" action="/unit/update/{{ unit.Unit_id }}">
+          <td>{{ unit.Unit_id }}</td>
+          <td><input type="text" name="Build_num" value="{{ unit.Build_num }}" required></td>
+          <td><input type="text" name="Unit_num" value="{{ unit.Unit_num }}" required></td>
+          <td><input type="text" name="Owner_name" value="{{ unit.Owner_name }}" required></td>
+          <td><input type="text" name="Occupant_by" value="{{ unit.Occupant_by or '' }}"></td>
+          <td>
+            <input type="submit" value="Save">
+        </form>
+        <form method="POST" action="/unit/delete/{{ unit.Unit_id }}" onsubmit="return confirm('Delete this unit?');">
+          <input type="submit" value="Delete">
+        </form>
+          </td>
+      </tr>
+      {% endfor %}
+
+      <!-- Add new unit row -->
+      <tr>
+        <form method="POST" action="/unit">
+          <td>New</td>
+          <td><input type="text" name="Build_num" placeholder="Building #" required></td>
+          <td><input type="text" name="Unit_num" placeholder="Unit #" required></td>
+          <td><input type="text" name="Owner_name" placeholder="Owner Name" required></td>
+          <td><input type="text" name="Occupant_by" placeholder="Not Assigned"></td>
+          <td><input type="submit" value="Save"></td>
+        </form>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
